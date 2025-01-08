@@ -180,7 +180,8 @@ summary_stats %>%
   gt() %>%
   tab_header(
     title = "Summary Statistics"
-  )
+  ) %>%
+  gt::as_raw_html()
 ```
 
 
