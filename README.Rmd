@@ -108,6 +108,7 @@ For an overview of the variable names, see the following table.
 readr::read_csv("data-raw/dictionary.csv") |>
   dplyr::filter(file_name == "ploswater.rda") |>
   dplyr::select(variable_name:description) |> 
+  head(10) |>
   knitr::kable() |> 
   kableExtra::kable_styling("striped") |> 
   kableExtra::scroll_box(height = "200px")
