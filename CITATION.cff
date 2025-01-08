@@ -1,0 +1,27 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "ploswater" in publications use:'
+type: software
+license: CC-BY-4.0
+title: 'ploswater: Data on Publications in PLOS Water Journal'
+version: 0.0.0.9000
+doi: 10.5281/zenodo.14616993
+abstract: Provides access to publishing trends from PLOS Water Journal.
+authors:
+- family-names: Dubey
+  given-names: Yash
+  email: ydubey@ethz.ch
+  orcid: https://orcid.org/0009-0001-2849-970X
+repository-code: https://github.com/openwashdata/ploswater
+url: https://github.com/openwashdata/ploswater
+date-released: '2025-01-08'
+contact:
+- family-names: Dubey
+  given-names: Yash
+  email: ydubey@ethz.ch
+  orcid: https://orcid.org/0009-0001-2849-970X
+

@@ -1,0 +1,3 @@
+fileName,name,contentUrl,encodingFormat
+ploswater.csv,ploswater,https://raw.githubusercontent.com/openwashdata/ploswater/main/inst/extdata/ploswater.csv,csv
+ploswater.xlsx,ploswater,https://raw.githubusercontent.com/openwashdata/ploswater/main/inst/extdata/ploswater.xlsx,ooxml

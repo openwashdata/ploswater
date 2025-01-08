@@ -1,0 +1,13 @@
+
+bibentry(bibtype = "Misc",
+         key = "dubey:2025",
+         title = "ploswater: Data on Publications in PLOS Water Journal",
+         author = person(given = "Yash",
+                         family = "Dubey",
+                         email = "ydubey@ethz.ch",
+                         comment = c(ORCID = "0009-0001-2849-970X")),
+         year = "2025",
+         doi = "10.5281/zenodo.14616993",
+         url = "https://github.com/openwashdata/ploswater",
+         abstract = "Provides access to publishing trends from PLOS Water Journal.",
+         version = "0.0.0.9000")
