@@ -1,0 +1,196 @@
+---
+output: github_document
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+  chunk_output_type: console
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  message = FALSE,
+  warning = FALSE,
+  fig.retina = 2,
+  fig.align = 'center'
+)
+```
+
+# ploswater
+
+<!-- badges: start -->
+
+[![License: CC BY
+4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
+<!-- badges: end -->
+
+The goal of ploswater is to make available data on publication trends from the [PLOS Water Journal](https://journals.plos.org/water/).
+
+## Installation
+
+You can install the development version of ploswater from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("openwashdata/ploswater")
+```
+
+```{r}
+## Run the following code in console if you don't have the packages
+## install.packages(c("dplyr", "knitr", "readr", "stringr", "gt", "kableExtra"))
+library(dplyr)
+library(knitr)
+library(readr)
+library(stringr)
+library(gt)
+library(kableExtra)
+```
+
+Alternatively, you can download the individual datasets as a CSV or XLSX
+file from the table below.
+
+1.  Click Download CSV. A window opens that displays the CSV in
+    your browser.
+2.  Right-click anywhere inside the window and select "Save Page As...".
+3.  Save the file in a folder of your choice.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+extdata_path <- "https://github.com/openwashdata/ploswater/raw/main/inst/extdata/"
+
+read_csv("data-raw/dictionary.csv") |> 
+  distinct(file_name) |> 
+  dplyr::mutate(file_name = str_remove(file_name, ".rda")) |> 
+  dplyr::rename(dataset = file_name) |> 
+  mutate(
+    CSV = paste0("[Download CSV](", extdata_path, dataset, ".csv)"),
+    XLSX = paste0("[Download XLSX](", extdata_path, dataset, ".xlsx)")
+  ) |> 
+  knitr::kable()
+
+```
+
+## Data
+
+The package provides access to data from publications in the [PLOS Water Journal](https://journals.plos.org/water/). This data includes information on publication types, SDGs targeted, authors, institutions, and more.
+
+```{r}
+library(ploswater)
+```
+
+### ploswater
+
+The dataset `ploswater` contains data about ... It has
+`r nrow(ploswater)` observations and `r ncol(ploswater)`
+variables
+
+```{r}
+ploswater |> 
+  select(1:10) |>  # Select first 10 columns
+  head(3) |> 
+  gt::gt() |>
+  gt::as_raw_html()
+```
+
+For an overview of the variable names, see the following table.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+readr::read_csv("data-raw/dictionary.csv") |>
+  dplyr::filter(file_name == "ploswater.rda") |>
+  dplyr::select(variable_name:description) |> 
+  knitr::kable() |> 
+  kableExtra::kable_styling("striped") |> 
+  kableExtra::scroll_box(height = "200px")
+```
+
+## Example
+
+```{r}
+library(ploswater)
+library(ggplot2)
+library(lubridate)
+
+# Convert publication_date to Date type
+ploswater$publication_date <- as.Date(ploswater$publication_date)
+
+# Create year-month column and count publications
+monthly_counts <- ploswater %>%
+  mutate(publication_month = floor_date(publication_date, "month")) %>%
+  count(publication_month) %>%
+  arrange(publication_month)
+
+# Create bar chart
+ggplot(monthly_counts, aes(x = publication_month, y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "",
+       y = "Number of Publications",
+       title = "Number of Publications per Month") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_date(date_breaks = "3 month", 
+               date_labels = "%b %Y")
+```
+
+```{r}
+# Create citation impact visualization
+ggplot(ploswater, aes(x = publication_date, y = cited_by_count)) +
+  geom_point(aes(size = fwci), alpha = 0.6) +
+  scale_size_continuous(name = "Field-Weighted\nCitation Impact") +
+  labs(x = "Publication Date",
+       y = "Number of Citations",
+       title = "Citation Impact Over Time") +
+  theme_minimal()
+```
+
+
+```{r}
+library(gt)
+
+# Compute summary statistics
+summary_stats <- data.frame(
+  Statistic = c(
+    "Mean Citations",
+    "Median Citations",
+    "Mean FWCI",
+    "Total Publications",
+    "Correlation: Citations & FWCI"
+  ),
+  Value = c(
+    mean(ploswater$cited_by_count, na.rm = TRUE),
+    median(ploswater$cited_by_count, na.rm = TRUE),
+    mean(ploswater$fwci, na.rm = TRUE),
+    round(nrow(ploswater), 0),
+    cor(ploswater$cited_by_count, ploswater$fwci, use = "complete.obs")
+  )
+)
+
+# Create and print the table using gt
+summary_stats %>%
+  gt() %>%
+  tab_header(
+    title = "Summary Statistics"
+  )
+```
+
+
+
+## License
+
+Data are available as
+[CC-BY](https://github.com/openwashdata/%7B%7B%7Bpackagename%7D%7D%7D/blob/main/LICENSE.md).
+
+## Citation
+
+Please cite this package using:
+
+```{r}
+citation("ploswater")
+```

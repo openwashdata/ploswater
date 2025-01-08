@@ -1,3 +1,5 @@
 ^data-raw$
 ^ploswater\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
